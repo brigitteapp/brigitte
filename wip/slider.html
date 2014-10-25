@@ -42,32 +42,63 @@
 </div>
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
-  var anchorY = null,
-      touchY = null,
-      $b = $('.b'),
-      renderRequired = false,
-      maxHeight = $b.parent().height(),
-      minHeight = 0
+  var Slider = function(element) {
+    this.$element = $(element)
+    this.anchorY = null
+    this.touchY = null
+    this.options = {
+      minPos: 0,
+      maxPos: this.$element.parent().height() - this.$element.height()
+    }
+    this.position = this.options.maxPos / 2
+    this.init()
+  }
 
-  $('.image-container')
-  .on('touchstart', function(e) {
-    var $this = $(this),
-        firstTouch = e.originalEvent.touches[0]
+  Slider.prototype.init = function() {
+    this.$element.on('touchstart', $.proxy(this.onTouchStart, this))
+    this.$element.on('touchmove', $.proxy(this.onTouchMove, this))
+    this.draw()
+  }
 
-    $this.data('drag', {
-      height: $b.height()
-    })
+  Slider.prototype.onTouchStart = function(e) {
+    var firstTouch = e.originalEvent.touches[0]
 
-    anchorY = touchY = firstTouch.clientY
-  })
-  .on('touchmove', function(e) {
-    var $this = $(this),
-        firstTouch = e.originalEvent.touches[0]
-        dragData = $this.data('drag')
+    this.anchorY = this.touchY = firstTouch.clientY
+  }
 
-    touchY = firstTouch.clientY
+  Slider.prototype.onTouchMove = function(e) {
+    var firstTouch = e.originalEvent.touches[0]
+
+    this.touchY = firstTouch.clientY
     requireRender()
-  })
+  }
+
+  Slider.prototype.update = function() {
+    var diff, height, delta
+    if (!this.touchY || !this.anchorY) return false
+    diff = this.touchY - this.anchorY
+    if (Math.abs(diff) < 1) {
+      this.touchY = null
+      return false
+    }
+    delta = diff * 0.2
+    this.anchorY = this.anchorY + delta
+    position = this.position
+    position += delta
+    position = position > this.options.maxPos ? this.options.maxPos : position
+    position = position < this.options.minPos ? this.options.minPos : position
+    this.position = position
+  }
+
+  Slider.prototype.draw = function() {
+    this.update()
+    this.$element.css({ top: this.position })
+    $('.b').height(this.position + 1)
+    requireRender()
+  }
+
+  var slider = new Slider($('.slider')[0])
+  var renderRequired = false
 
   function requireRender() {
     if (renderRequired) return
@@ -75,26 +106,8 @@
     window.requestAnimationFrame(render)
   }
 
-  function moveCursor() {
-    var diff, height, delta
-    if (!touchY || !anchorY) return false
-    diff = touchY - anchorY
-    if (Math.abs(diff) < 1) {
-      touchY = null
-      return false
-    }
-    delta = diff * 0.2
-    anchorY = anchorY + delta
-    height = $b.height()
-    height += delta
-    height = height > maxHeight ? maxHeight : height
-    height = height < minHeight ? minHeight : height
-    $b.height(height)
-    requireRender()
-  }
-
   function render() {
     renderRequired = false
-    moveCursor()
+    slider.draw()
   }
 </script>
