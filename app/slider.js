@@ -109,7 +109,7 @@ Slider.prototype.update = function() {
   }
   if (value) {
     this.value = value
-    this.$root.trigger('change', this.value)
+    this.$root.trigger('change', this.value);
   }
 }
 
