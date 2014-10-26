@@ -16,8 +16,8 @@ html, body {
     position: relative;
     background-image:url("../img/swipe-choice-bg-1.jpg");
 
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
     margin-top: -10px;
 }
 
@@ -25,12 +25,13 @@ html, body {
     width: 100%;
     position: absolute;
     left: 0;
-    background: no-repeat center;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
     transform: translate3d(0,0,0);
 }
 
 .image {
-    background-size: contain;
+    background-size: contain !important;
 }
 
 .shake {
