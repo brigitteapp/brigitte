@@ -31,6 +31,7 @@
 
   Slider.prototype.init = function() {
     this.$element.on('touchstart', $.proxy(this.onTouchStart, this))
+    this.$element.on('touchend', $.proxy(this.onTouchEnd, this))
     this.$root.on('touchstart', $.proxy(this.onTouchStartRoot, this))
     this.$element.on('touchmove', $.proxy(this.onTouchMove, this))
     this.draw()
@@ -43,6 +44,12 @@
 
     e.stopPropagation()
     e.preventDefault()
+  }
+
+  Slider.prototype.onTouchEnd = function(e) {
+    this.anchorY = this.touchY = null
+
+    requireRender()
   }
 
   Slider.prototype.onTouchStartRoot = function(e) {
@@ -64,14 +71,34 @@
   }
 
   Slider.prototype.update = function() {
-    var diff, height, delta, value
-    if (!this.touchY || !this.anchorY) return false
-    diff = this.touchY - this.anchorY
-    if (Math.abs(diff) < 1) {
-      this.touchY = null
-      return false
+    var diff, height, delta, value, stickZone, target, speed
+    if (this.touchY) { // dragging
+      speed = 0.75
+      diff = this.touchY - this.anchorY
     }
-    delta = diff * 0.75
+    else {// free
+      speed = 0.2
+      stickZone = 0.25
+      // proche du haut
+      if (this.position <= stickZone * this.options.maxPos)
+        target = this.options.minPos
+      // proche du bas
+      else if (this.position >= (1 - stickZone) * this.options.maxPos)
+        target = this.options.maxPos
+      // milieu
+      else
+        target = this.options.maxPos / 2
+      diff = target - this.position
+    }
+
+    if (Math.abs(diff) >= 1)
+      delta = diff * speed
+    else
+      delta = diff
+
+    if (diff === 0)
+      return false
+
     this.anchorY = this.anchorY + delta
     position = this.position
     position += delta
@@ -91,11 +118,11 @@
   }
 
   Slider.prototype.draw = function() {
-    this.update()
+    var x = this.update()
     this.$element.css({ top: this.position })
     $('.b').height(this.options.maxPos - this.position)
     $('.a').height(this.position)
-    requireRender()
+    if (x !== false) requireRender()
   }
 
   var slider = new Slider($('.slider')[0])
