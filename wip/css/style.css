@@ -1,4 +1,8 @@
 
+@font-face {
+    font-family: "Montserrat";
+    src: url('../font/Montserrat-Regular.ttf?1412935652') format('truetype');
+}
 
 html, body {
     margin: 0;
@@ -63,3 +67,11 @@ html, body {
     width: 100%;
     height: 70px;
   }
+  .txt-swiper{
+      font-size: 15px;
+      line-height: 46px;
+      padding-left: 20px;
+      color: white;
+      font-family: "Montserrat";
+  }
+
