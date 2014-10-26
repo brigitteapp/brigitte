@@ -31,7 +31,11 @@ angular.module('myApp.steps', ['ngRoute'])
             if (next_step_id >= $scope.steps.length) {
                 next_step_id = $scope.steps.length - 1;
 
-                var reco = $scope.recoTree['C']['M']['E']['L']['I']['S']['S'];
+                var reco = $scope.recoTree[$scope.choices[0]][$scope.choices[1]][$scope.choices[2]][$scope.choices[3]][$scope.choices[4]][$scope.choices[5]][$scope.choices[6]];
+
+								test($scope.choices)
+
+
                 console.log("expoData", $scope.expoData[reco])
             }
             
