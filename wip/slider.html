@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <style>
   html, body {
     margin: 0;
@@ -9,38 +12,67 @@
     width: 100%;
     height: 100%;
     position: relative;
+    background-color: black;
+  }
+
+  .image, .image-back {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    background: no-repeat center;
+    transform: translate3d(0,0,0);
   }
 
   .image {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+    background-size: contain;
+  }
+
+  .shake {
+    -webkit-animation: shake 0.25s 0 4 linear alternate;
+            animation: shake 0.25s 0 4 linear alternate;
+  }
+
+  @-webkit-keyframes shake { to { -webkit-transform: scale(1.1) } }
+          @keyframes shake { to { -webkit-transform: scale(1.1) } }
+
+  .image-back {
+    /*-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);*/
+    opacity: 0.5;
   }
 
   .a {
+    top: 0;
     background-image: url(a.jpeg);
   }
 
   .b {
+    bottom: 0;
     background-image: url(b.jpeg);
-    height: 50%;
   }
 
   .slider {
     position: absolute;
     width: 100%;
-    height: 150px;
+    height: 70px;
     background-color: brown;
   }
 </style>
 <div class="image-container">
+  <div class="image-back a"></div>
   <div class="image a"></div>
+  <div class="image-back b"></div>
   <div class="image b"></div>
   <div class="slider"></div>
 </div>
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script>
   var Slider = function(element) {
     this.$element = $(element)
@@ -56,6 +88,7 @@
 
   Slider.prototype.init = function() {
     this.$element.on('touchstart', $.proxy(this.onTouchStart, this))
+    this.$element.parent().on('touchstart', $.proxy(this.onParentTouchStart, this))
     this.$element.on('touchmove', $.proxy(this.onTouchMove, this))
     this.draw()
   }
@@ -64,6 +97,18 @@
     var firstTouch = e.originalEvent.touches[0]
 
     this.anchorY = this.touchY = firstTouch.clientY
+
+    e.stopPropagation()
+    e.preventDefault()
+  }
+
+  Slider.prototype.onParentTouchStart = function(e) {
+    this.$element.addClass('shake')
+    setTimeout($.proxy(function(){
+      this.$element.removeClass('shake')
+    }, this), 1000)
+    e.stopPropagation()
+    e.preventDefault()
   }
 
   Slider.prototype.onTouchMove = function(e) {
@@ -71,6 +116,8 @@
 
     this.touchY = firstTouch.clientY
     requireRender()
+
+    e.preventDefault()
   }
 
   Slider.prototype.update = function() {
@@ -81,7 +128,7 @@
       this.touchY = null
       return false
     }
-    delta = diff * 0.2
+    delta = diff * 0.75
     this.anchorY = this.anchorY + delta
     position = this.position
     position += delta
@@ -93,7 +140,8 @@
   Slider.prototype.draw = function() {
     this.update()
     this.$element.css({ top: this.position })
-    $('.b').height(this.position + 1)
+    $('.b').height(this.options.maxPos - this.position)
+    $('.a').height(this.position)
     requireRender()
   }
 
