@@ -1,0 +1,63 @@
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  .image-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: black;
+  }
+
+  .image, .image-back {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    background: no-repeat center;
+    transform: translate3d(0,0,0);
+  }
+
+  .image {
+    background-size: contain;
+  }
+
+  .shake {
+    -webkit-animation: shake 0.25s 0 4 linear alternate;
+            animation: shake 0.25s 0 4 linear alternate;
+  }
+
+  @-webkit-keyframes shake { to { -webkit-transform: scale(1.1) } }
+          @keyframes shake { to { -webkit-transform: scale(1.1) } }
+
+  .image-back {
+    /*-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);*/
+    opacity: 0.5;
+  }
+
+  .a {
+    top: 0;
+    background-image: url("../img/a.jpeg");
+  }
+
+  .b {
+    bottom: 0;
+    background-image: url("../img/b.jpeg");
+  }
+
+  .slider {
+    position: absolute;
+    width: 100%;
+    height: 70px;
+    background-color: brown;
+  }
