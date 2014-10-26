@@ -2,13 +2,16 @@
 
 angular.module('myApp.view2', ['ngRoute'])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view2', {
-    templateUrl: 'view2/view2.html',
-    controller: 'View2Ctrl'
-  });
-}])
-
 .controller('View2Ctrl', [function() {
+        $scope.title = "Step2";
 
+        render_slides(function(value){
+            console.log('slider value is', value);
+        })
+
+        $scope.next_step = function(step){
+            console.log("next step", step);
+            $location.url('/view2');
+            return false;
+        };
 }]);
