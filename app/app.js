@@ -29,7 +29,7 @@ config(['$routeProvider', function($routeProvider) {
 
 
 var render_slides = function(callback){
-    var slider = new Slider($('.slider')[0]);
+    window.slider = new Slider($('.slider')[0]);
 
     $('.image-container').on('change', function(e, value) {
         callback(value)
