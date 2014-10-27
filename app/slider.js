@@ -30,6 +30,7 @@ Slider.prototype.init = function() {
   this.$element.on('touchend', $.proxy(this.onTouchEnd, this))
   this.$root.on('touchstart', $.proxy(this.onTouchStartRoot, this))
   this.$element.on('touchmove', $.proxy(this.onTouchMove, this))
+  $(window).on('resize', $.proxy(this.onResize, this))
   this.draw()
 }
 
@@ -38,6 +39,13 @@ Slider.prototype.init = function() {
         this.value = null
         this.init()
     }
+
+Slider.prototype.onResize = function() {
+  var ratio = this.position / this.options.maxPos
+  this.options.maxPos = this.$root.height() - this.$element.height()
+  this.position = this.options.maxPos * ratio
+  requireRender()
+}
 
 Slider.prototype.onTouchStart = function(e) {
   var firstTouch = e.originalEvent.touches[0]
