@@ -34,11 +34,11 @@ Slider.prototype.init = function() {
   this.draw()
 }
 
-    Slider.prototype.reset = function(){
+Slider.prototype.reset = function(){
 	this.position = this.options.maxPos / 2
-        this.value = null
-        this.init()
-    }
+  this.value = null
+  this.init()
+}
 
 Slider.prototype.onResize = function() {
   var ratio = this.position / this.options.maxPos
