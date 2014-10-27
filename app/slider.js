@@ -88,7 +88,7 @@ Slider.prototype.update = function() {
   }
   else {// free
     speed = 0.2
-    stickZone = 0.25
+    stickZone = 0.2
     // proche du haut
     if (this.position <= stickZone * this.options.maxPos)
       target = this.options.minPos
