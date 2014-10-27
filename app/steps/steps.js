@@ -30,28 +30,37 @@ angular.module('myApp.steps', ['ngRoute'])
         $scope.render_next = function (value) {
             var next_step_id = $scope.current_step.id;
 
+            // handle second step
+            if (next_step_id == 2 && $scope.choices[0] === 'C' && value === 'a') {
+              value = 'c'
+            }
+
             $scope.choices.push($scope.current_step[value].value)
 
             if (next_step_id >= $scope.steps.length) {
                 next_step_id = $scope.steps.length - 1;
 
-                var reco = $scope.recoTree[$scope.choices[0]]['C'][$scope.choices[2]][$scope.choices[3]][$scope.choices[4]][$scope.choices[5]][$scope.choices[6]];
+                var reco = $scope.recoTree[$scope.choices[0]][$scope.choices[1]][$scope.choices[2]][$scope.choices[3]][$scope.choices[4]][$scope.choices[5]][$scope.choices[6]];
 
                 $scope.finished = true
-
-                var reco = $scope.recoTree['C']['M']['E']['L']['I']['S']['S'];
 
                 console.log("expoData", $scope.expoData[reco])
 
                 $scope.reco = $scope.expoData[reco];
             }
-            
+
             $scope.current_step = $scope.steps[next_step_id];
 
             console.log('slider value is', $scope.current_step);
 
             $scope.imga = "url('img/questions/" + $scope.current_step.a.img + "')";
             $scope.imgb = "url('img/questions/" + $scope.current_step.b.img + "')";
+
+            // handle second step
+            if (next_step_id == 1 && $scope.choices[0] === 'C') {
+              $scope.imga = "url('img/questions/" + $scope.current_step.c.img + "')";
+            }
+
             window.slider.reset()
 
             $scope.$apply();
