@@ -4,7 +4,7 @@
     src: url('../font/Montserrat-Regular.ttf?1412935652') format('truetype');
 }
 
-html, body {
+html, body, .screen {
     margin: 0;
     padding: 0;
     height: 100%;
