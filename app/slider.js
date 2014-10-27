@@ -33,6 +33,12 @@ Slider.prototype.init = function() {
   this.draw()
 }
 
+    Slider.prototype.reset = function(){
+	this.position = this.options.maxPos / 2
+        this.value = null
+        this.init()
+    }
+
 Slider.prototype.onTouchStart = function(e) {
   var firstTouch = e.originalEvent.touches[0]
 

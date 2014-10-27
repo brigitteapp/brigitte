@@ -52,6 +52,7 @@ angular.module('myApp.steps', ['ngRoute'])
 
             $scope.imga = "url('img/questions/" + $scope.current_step.a.img + "')";
             $scope.imgb = "url('img/questions/" + $scope.current_step.b.img + "')";
+            window.slider.reset()
 
             $scope.$apply();
         }
